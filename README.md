@@ -13,10 +13,11 @@ it passes paramters from routes through to the callback defined by the user
 through a `Map<string, mixed>` in the function.
 
 ## Installation
-Currently this needs a bit of work, but clone this repository down and point
-Nginx at it (I need to rework the route matcher to handle `/index.php/<route>`
-request URIs so you can use it without needing a rewrite), and ensure you have
-a `try_files /index.php$args;` line in your location block.
+Currently this needs a bit of work, but clone this repository down and run
+`composer install`. The you'll want to point Nginx at it (I need to rework the
+route matcher to handle `/index.php/<route>` request URIs so you can use it
+without needing a rewrite), and ensure you havea `try_files /index.php$args;`
+line in your location block.
 
 Then, take a look at the `index.php` file in `/public` for how it currently works.
 
