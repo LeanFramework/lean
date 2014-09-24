@@ -28,8 +28,6 @@ class Router
     /**
      * The routes Map, keyed to method types and with route names and callbacks
      */
-    //private Map<string, Map<string, (function(Vector<mixed>): void)>> $routes;
-
     private RouteCollection $routes;
 
     // Taken from Slim framework!
@@ -129,10 +127,10 @@ class Router
         $this->defineRoute('DELETE', $routeName, $callback);
     }
 
-    private function defineRoute(
+    protected function defineRoute(
         string $method,
         string $routeName,
-        (function(Map<string, mixed>): void) $callback
+        (function(Map<string, mixed>): void) $callback,
     ): void
     {
         // Build the regex
@@ -165,7 +163,10 @@ class Router
         }
     }
 
-    public function run(string $req, string $method): void
+    public function run(
+        string $req,
+        string $method,
+    ): void
     {
         $is404 = true;
 
@@ -243,7 +244,9 @@ class Router
     /**
      * Builds a regex route match and set of request params in the URI from a given route definition
      */
-    private function buildRegex(string $url): BuiltRoute
+    private function buildRegex(
+        string $url,
+    ): BuiltRoute
     {
         // Handle the special case of a top level "/" route
         if ($url === '/') {
@@ -281,7 +284,9 @@ class Router
      * Tests if a given item is a request variable (eg. ":name") and returns it without the colon
      * if it is. Returns null if not
      */
-    private function isRequestVariable(string $item): ?string
+    private function isRequestVariable(
+        string $item,
+    ): ?string
     {
         if (preg_match('/^\:\w+$/', $item)) {
             // remove colon for var name
@@ -320,8 +325,7 @@ class Router
     public function setStatus(int $status): void
     {
         $statusMessage = $this->messages[$status];
-        header('HTTP/1.0 ' . $statusMessage);
-        //http_response_code($status);
+        header('HTTP/1.1 ' . $statusMessage);
     }
 }
 
