@@ -12,6 +12,11 @@ The `Lean\Router` class is currently responding to GET, POST, PUT and DELETE,
 it passes paramters from routes through to the callback defined by the user
 through a `Map<string, mixed>` in the function.
 
+__Update__: I've now begun porting the Request and Response API/Classes over, and
+building the public `Lean\Lean` class and API. I think I'll be able to do it all in
+strict mode, too, but it may entail some divergence from Slim's API, we'll see what
+happens!
+
 ## Installation
 Currently this needs a bit of work, but clone this repository down and run
 `composer install`. The you'll want to point Nginx at it (I need to rework the
