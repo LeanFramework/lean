@@ -1,7 +1,6 @@
-<?hh
-
+<?hh // partial
 namespace Lean;
-
+ 
 type RequestVars = shape(
     'GET' => Map<string, string>,
     'POST' => Map<string, string>,
@@ -20,35 +19,48 @@ class Lean
     )
     {
         $this->router = new Router();
-        $this->request = new Request($_SERVER, $this->getRequestVars());
+        $this->request = new Request($this->getServerVars(), $this->getRequestVars());
         $this->response = new Response();
     }
 
     public function run()
     {
+        $this->router->run($this->request->uri, $this->request->method); 
     }
 
-    public function get(): this
+    public function get(
+        string $routeName,
+        (function(Map<string, mixed>): void) $callback,
+    ): this
     {
-
+        $this->router->get($routeName, $callback);
         return $this;
     }
 
-    public function post(): this
+    public function post(
+        string $routeName,
+        (function(Map<string, mixed>): void) $callback,    
+    ): this
     {
-
+        $this->router->post($routeName, $callback);
         return $this;
     }
 
-    public function put(): this
+    public function put(
+        string $routeName,
+        (function(Map<string, mixed>): void) $callback,    
+    ): this
     {
-
+        $this->router->put($routeName, $callback);
         return $this;
     }
 
-    public function delete(): this
+    public function delete(
+        string $routeName,
+        (function(Map<string, mixed>): void) $callback,        
+    ): this
     {
-
+        $this->router->delete($routeName, $callback);
         return $this;
     }
 
@@ -70,10 +82,17 @@ class Lean
 
     private function getRequestVars(): RequestVars
     {
+        // UNSAFE
         return shape(
-            'GET' => filter_input_array(INPUT_GET),
-            'POST' => filter_input_array(INPUT_POST),
+            'GET' => $_GET,
+            'POST' => $_POST,
             'COOKIES' => new Map($_COOKIE),
         );
+    }
+
+    private function getServerVars(): array<string, string>
+    {
+        // UNSAFE
+        return $_SERVER;
     }
 }

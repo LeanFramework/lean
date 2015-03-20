@@ -12,6 +12,7 @@ namespace Lean;
 class Request
 {
     public string $method;
+    public string $uri;
     public Map<string, string> $params;
     public Map<string, string> $headers;
 
@@ -20,7 +21,14 @@ class Request
         private RequestVars $reqVars,
     ): void
     {
-        $this->method = $this->server['HTTP_METHOD'];
+        $this->method = $server['REQUEST_METHOD'];
+
+//        if ($this->server['REQUEST_URI'] !== null) {
+            $this->uri = $server['REQUEST_URI'];
+//        } else {
+//            $this->uri = '/';
+//        }
+
         $this->params = Map {};
         $this->headers = Map {};
 
