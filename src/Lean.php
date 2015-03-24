@@ -1,6 +1,6 @@
 <?hh // partial
 namespace Lean;
- 
+
 type RequestVars = shape(
     'GET' => Map<string, string>,
     'POST' => Map<string, string>,
@@ -25,7 +25,7 @@ class Lean
 
     public function run()
     {
-        $this->router->run($this->request->uri, $this->request->method); 
+        $this->router->run($this->request->uri, $this->request->method);
     }
 
     public function get(
@@ -39,7 +39,7 @@ class Lean
 
     public function post(
         string $routeName,
-        (function(Map<string, mixed>): void) $callback,    
+        (function(Map<string, mixed>): void) $callback,
     ): this
     {
         $this->router->post($routeName, $callback);
@@ -48,7 +48,7 @@ class Lean
 
     public function put(
         string $routeName,
-        (function(Map<string, mixed>): void) $callback,    
+        (function(Map<string, mixed>): void) $callback,
     ): this
     {
         $this->router->put($routeName, $callback);
@@ -57,7 +57,7 @@ class Lean
 
     public function delete(
         string $routeName,
-        (function(Map<string, mixed>): void) $callback,        
+        (function(Map<string, mixed>): void) $callback,
     ): this
     {
         $this->router->delete($routeName, $callback);
