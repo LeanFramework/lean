@@ -14,7 +14,7 @@ class LeanTest extends \PHPUnit_Framework_TestCase
         $this->configData = [
             'SERVER' => [
                 'REQUEST_METHOD' => 'GET',
-                'REQUEST_URI' => '/'
+//                'REQUEST_URI' => '/'
             ]
         ];
 

@@ -23,11 +23,11 @@ class Request
     {
         $this->method = $server['REQUEST_METHOD'];
 
-//        if ($this->server['REQUEST_URI'] !== null) {
+        if (array_key_exists('REQUEST_URI', $this->server)) {
             $this->uri = $server['REQUEST_URI'];
-//        } else {
-//            $this->uri = '/';
-//        }
+        } else {
+            $this->uri = '/';
+        }
 
         $this->params = Map {};
         $this->headers = Map {};

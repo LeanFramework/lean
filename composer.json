@@ -6,6 +6,7 @@
         "psr-4": { "Lean\\" : "src/" }
     },
     "scripts": {
-        "test": "phpunit --colors=always --bootstrap=vendor/autoload.php tests"
+        "test": "phpunit --colors=always --bootstrap=vendor/autoload.php tests",
+        "docker-test": "docker exec lean_web_1 /var/www/vendor/bin/phpunit --bootstrap=/var/www/vendor/autoload.php /var/www/tests"
     }
 }
