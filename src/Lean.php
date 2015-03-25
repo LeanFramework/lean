@@ -15,7 +15,7 @@ class Lean
 
     // TODO: Create a proper options array shape
     public function __construct(
-        private array<string, string> $config = [],
+        private array<string, array<string, string>> $config = [],
     )
     {
         $this->router = new Router();
@@ -92,6 +92,10 @@ class Lean
 
     private function getServerVars(): array<string, string>
     {
+        if (array_key_exists('SERVER', $this->config)) {
+            return $this->config['SERVER'];
+        }
+
         // UNSAFE
         return $_SERVER;
     }

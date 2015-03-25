@@ -6,6 +6,6 @@
         "psr-4": { "Lean\\" : "src/" }
     },
     "scripts": {
-        "test": "phpunit --bootstrap=vendor/autoload.php tests"
+        "test": "phpunit --colors=always --bootstrap=vendor/autoload.php tests"
     }
 }

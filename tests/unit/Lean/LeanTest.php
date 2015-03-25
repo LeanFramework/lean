@@ -3,8 +3,23 @@ namespace Lean\Tests;
 
 class LeanTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFalseIsTrue()
+    protected array<string, array<string, string>> $configData = [];
+
+    public function setUp()
     {
-        $this->assertTrue(false);
+    }
+
+    public function testRequestAndResponseInstantiated()
+    {
+        $this->configData = [
+            'SERVER' => [
+                'REQUEST_METHOD' => 'GET',
+                'REQUEST_URI' => '/'
+            ]
+        ];
+
+        $lean = new \Lean\Lean($this->configData);
+        $this->assertInstanceOf('Lean\Request', $lean->request());
+        $this->assertInstanceOf('Lean\Response', $lean->response());
     }
 }
