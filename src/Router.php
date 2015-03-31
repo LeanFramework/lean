@@ -1,4 +1,4 @@
-<?hh //strict
+<?hh // strict
 /**
  * The main router class that defines routes and sets the up with callbacks
  *
@@ -23,12 +23,18 @@ type RouteCollection = shape(
     'DELETE' => Vector<Route>,
 );
 
+type RawResponse = shape(
+    'callback' => (function(Map<string, mixed>): void),
+    'matches' => ?Map<string, mixed>
+);
+
 class Router
 {
     /**
      * The routes Map, keyed to method types and with route names and callbacks
      */
     private RouteCollection $routes;
+    public Headers $headers;
 
     // Taken from Slim framework!
     private Map<int, string> $messages = Map {
@@ -84,7 +90,7 @@ class Router
     };
 
 
-    public function __construct()
+    public function __construct(Headers $headers)
     {
         // Initialise the RoutesCollection $routes shape
         $this->routes = shape(
@@ -93,6 +99,8 @@ class Router
             'PUT' => Vector {},
             'DELETE' => Vector {},
         );
+
+        $this->headers = $headers;
     }
 
     public function get(
@@ -166,7 +174,7 @@ class Router
     public function run(
         string $req,
         string $method,
-    ): void
+    ): RawResponse
     {
         $is404 = true;
 
@@ -181,8 +189,10 @@ class Router
 
                     if ($matches !== null) {
                         $is404 = false;
-                        call_user_func($route['callback'], $matches);
-                        return;
+                        return shape(
+                            'callback' => $route['callback'], 
+                            'matches' => $matches
+                        );
                     }
                 }
                 break;
@@ -196,8 +206,10 @@ class Router
 
                     if ($matches !== null) {
                         $is404 = false;
-                        call_user_func($route['callback'], $matches);
-                        return;
+                        return shape(
+                            'callback' => $route['callback'], 
+                            'matches' => $matches
+                        );
                     }
                 }
                 break;
@@ -211,8 +223,10 @@ class Router
 
                     if ($matches !== null) {
                         $is404 = false;
-                        call_user_func($route['callback'], $matches);
-                        return;
+                        return shape(
+                            'callback' => $route['callback'], 
+                            'matches' => $matches
+                        );
                     }
                 }
                 break;
@@ -226,8 +240,10 @@ class Router
 
                     if ($matches !== null) {
                         $is404 = false;
-                        call_user_func($route['callback'], $matches);
-                        return;
+                        return shape(
+                            'callback' => $route['callback'], 
+                            'matches' => $matches
+                        );
                     }
                 }
                 break;
@@ -235,10 +251,16 @@ class Router
                 break;
         }
 
-        if ($is404 === true) {
-            $this->setStatus(404);
-            print "404!";
-        }
+        $default = shape(
+            'callback' => function(Map<string, mixed> $items) {
+                $this->setStatus(404);
+                $this->headers->output();
+                print "404!";
+            },
+            'matches' => Map {}
+        );
+
+        return $default;
     }
 
     /**
@@ -325,7 +347,7 @@ class Router
     public function setStatus(int $status): void
     {
         $statusMessage = $this->messages[$status];
-        header('HTTP/1.1 ' . $statusMessage);
+        $this->headers->setStatus($status, $statusMessage);
     }
 }
 

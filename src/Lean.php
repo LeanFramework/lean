@@ -12,20 +12,29 @@ class Lean
     protected Router $router;
     public Request $request;
     public Response $response;
+    public Headers $headers;
 
     // TODO: Create a proper options array shape
     public function __construct(
         private array<string, array<string, string>> $config = [],
     )
     {
-        $this->router = new Router();
+        $this->headers = new Headers();
+        $this->router = new Router($this->headers);
         $this->request = new Request($this->getServerVars(), $this->getRequestVars());
         $this->response = new Response();
     }
 
     public function run()
     {
-        $this->router->run($this->request->uri, $this->request->method);
+        $this->response->parse(
+            $this->router->run(
+                $this->request->uri, 
+                $this->request->method
+            )
+        );
+
+        $this->response->finalize();
     }
 
     public function get(
